@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Application</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <video id="video-background" autoplay muted loop>
+    <source src="images/1.mp4" type="video/mp4">
+    <!-- Add more source elements for different video formats -->
+    Your browser does not support the video tag.
+</video>
+    <div class="card">
+      <div class="search">
+        <input type="text" name="city" id="city" placeholder="Enter City Name" spellcheck="false">
+        <button><img src="images/search.png" alt=""></button>
+      </div>
+
+      <div class="weather">
+        <img src="images/rain.png" class="weather-icon">
+        <h1 class="temp">20º</h1>
+        <h2 class="city">Noakhali</h2>
+        <div class="details">
+          <div class="col">
+            <img src="images/humidity.png" alt="">
+            <div>
+              <p class="humidity">50%</p>
+              <p>Humidity</p>
+            </div>
+          </div>
+          <div class="col">
+            <img src="images/wind.png" alt="">
+            <div>
+              <p class="wind">15Km/H</p>
+              <p>Wind Speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      const apiKey="18b09d7e1c06c128819e1bc6df99efa1";
+      const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      const searchBox = document.querySelector(".search input");
+      const searchBtn = document.querySelector(".search button");
+      const waetherIcon = document.querySelector(".weather-icon");
+
+
+      async function checkWeather(city){
+        const response = await fetch(apiUrl + city+ `&appid=${apiKey}`) ;
+        var data = await response.json();
+        console.log(data);
+        document.querySelector(".city").innerHTML=data.name;
+        document.querySelector(".temp").innerHTML=Math.round(data.main.temp)+"ºc";
+        document.querySelector(".humidity").innerHTML=data.main.humidity+"%";
+        document.querySelector(".wind").innerHTML=data.wind.speed+"km/h";
+        if(data.weather[0].main=="Haze"){
+          waetherIcon.src="images/Haze.png";
+        }
+        else if(data.weather[0].main=="Clouds"){
+          waetherIcon.src="images/clouds.png";
+        }
+        else if(data.weather[0].main=="Clear"){
+          waetherIcon.src="images/clear.png";
+        }
+        else if(data.weather[0].main=="Rain"){
+          waetherIcon.src="images/rain.png";
+        }  
+        else if(data.weather[0].main=="Drizzle"){
+          waetherIcon.src="images/drizzle.png";
+        }
+        else if(data.weather[0].main=="Mist"){
+          waetherIcon.src="images/mist.png";
+        }
+        else if(data.weather[0].main=="Snow"){
+          waetherIcon.src="images/snow.png";
+        }
+
+        document.querySelector(".weather").style.display ="block";
+
+      }
+
+      searchBtn.addEventListener("click", ()=>{
+
+        checkWeather(searchBox.value);
+      })
+      
+    </script>
+</body>
+</html>
